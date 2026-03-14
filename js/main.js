@@ -33,9 +33,11 @@ ipcMain.handle("virustotal-analyze", async (event, fileId) => {
       },
     );
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    return data;
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    return await response.json();
   } catch (err) {
     return { error: err.message };
   }

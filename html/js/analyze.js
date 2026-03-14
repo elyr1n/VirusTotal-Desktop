@@ -20,7 +20,7 @@ button.addEventListener("click", async () => {
     document.getElementById("file_name").textContent = file_name;
     document.getElementById("file_size").textContent = `${file_size} MB`;
     document.getElementById("result_scan").textContent =
-      `${malicious} / ${undetected}`;
+      `${malicious} / ${malicious + undetected}`;
   } catch (err) {
     alert("Ошибка при запросе к API: " + err.message);
   }

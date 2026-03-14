@@ -1,0 +1,19 @@
+{
+  "name": "VirusTotal",
+  "version": "1.0.0",
+  "description": "VirusTotal-Desktop version in JavaScript [Electron]",
+  "license": "MIT",
+  "author": "elyrin",
+  "type": "commonjs",
+  "main": "js/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "electron": "^41.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  }
+}

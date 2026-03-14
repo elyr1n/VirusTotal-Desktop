@@ -1,16 +1,29 @@
 const button = document.getElementById("virustotal_analyze");
+const input = document.getElementById("virustotal_file_id");
+const errorBox = document.getElementById("error_message");
 
 button.addEventListener("click", async () => {
-  const fileId = document.getElementById("virustotal_file_id").value.trim();
+  const fileId = input.value.trim();
 
-  if (!fileId) return alert("Введите File ID или хэш файла!");
-  if (fileId.length !== 64)
-    return alert("Хэш должен быть SHA256 и состоять из 64 символов.");
+  errorBox.textContent = "";
+
+  if (!fileId) {
+    errorBox.textContent = "Введите File ID или хэш файла!";
+    return input.focus();
+  }
+
+  if (fileId.length !== 64) {
+    errorBox.textContent = "Хэш должен быть SHA256 и состоять из 64 символов.";
+    return input.focus();
+  }
 
   try {
     const data = await window.electron.invoke("virustotal-analyze", fileId);
 
-    if (data.error) return alert("Ошибка: " + data.error);
+    if (data.error) {
+      errorBox.textContent = "Ошибка: " + data.error;
+      return;
+    }
 
     const file_name = data.data.attributes.names[0] || "-";
     const file_size = (data.data.attributes.size / 1024 / 1024).toFixed(2);
@@ -22,6 +35,6 @@ button.addEventListener("click", async () => {
     document.getElementById("result_scan").textContent =
       `${malicious} / ${malicious + undetected}`;
   } catch (err) {
-    alert("Ошибка при запросе к API: " + err.message);
+    errorBox.textContent = "Ошибка при запросе к API: " + err.message;
   }
 });

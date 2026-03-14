@@ -8,21 +8,19 @@ button.addEventListener("click", async () => {
   errorBox.textContent = "";
 
   if (!fileId) {
-    errorBox.textContent = "Введите File ID или хэш файла!";
-    return input.focus();
+    return (errorBox.textContent = "Введите File ID или хэш файла!");
   }
 
   if (fileId.length !== 64) {
-    errorBox.textContent = "Хэш должен быть SHA256 и состоять из 64 символов.";
-    return input.focus();
+    return (errorBox.textContent =
+      "Хэш должен быть SHA256 и состоять из 64 символов.");
   }
 
   try {
     const data = await window.electron.invoke("virustotal-analyze", fileId);
 
     if (data.error) {
-      errorBox.textContent = "Ошибка: " + data.error;
-      return;
+      return (errorBox.textContent = "Ошибка: " + data.error);
     }
 
     const file_name = data.data.attributes.names[0] || "-";

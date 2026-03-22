@@ -1,8 +1,9 @@
-const button = document.getElementById("virustotal_analyze");
+const button_analyze = document.getElementById("virustotal_analyze");
+const button_return = document.getElementById("return");
 const input = document.getElementById("virustotal_file_id");
 const errorBox = document.getElementById("error_message");
 
-button.addEventListener("click", async () => {
+button_analyze.addEventListener("click", async () => {
   const fileId = input.value.trim();
 
   errorBox.textContent = "";
@@ -35,4 +36,8 @@ button.addEventListener("click", async () => {
   } catch (err) {
     errorBox.textContent = "Ошибка при запросе к API: " + err.message;
   }
+});
+
+button_return.addEventListener("click", async () => {
+  window.electron.send("open-page", "virustotal");
 });

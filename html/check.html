@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #0a0c10;
+            background-image: 
+                linear-gradient(rgba(0, 110, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 110, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+
+        .spider-web {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .spider-web svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+        }
+
+        .spider-web path {
+            stroke: #0066ff;
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 8 12;
+            animation: crawl 30s linear infinite;
+        }
+
+        @keyframes crawl {
+            to { stroke-dashoffset: -200; }
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            background-color: #0f1219;
+            border: 1px solid #1e2a3a;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 102, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-label {
+            color: #b0d4ff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .input-label span {
+            width: 10px;
+            height: 10px;
+            background-color: #0066ff;
+            box-shadow: 0 0 10px #0066ff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .field-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-text {
+            flex: 1;
+            background: #010409;
+            border: 1.5px solid #1f2c3c;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: #e5efff;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-text:focus {
+            border-color: #0066ff;
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.2);
+        }
+
+        .btn-analyze {
+            background: transparent;
+            border: 2px solid #0066ff;
+            color: #0066ff;
+            font-weight: 800;
+            padding: 0 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-analyze:hover:not(:disabled) {
+            background: #0066ff;
+            color: #0a0c10;
+            box-shadow: 0 0 20px #0066ff;
+        }
+
+        .btn-analyze:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .btn-return {
+            background: transparent;
+            border: 2px solid #1e2a3a;
+            color: #7f9fcc;
+            font-weight: 600;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-return:hover {
+            border-color: #0066ff;
+            color: #0066ff;
+        }
+
+        .info-panel {
+            background: rgba(1, 4, 9, 0.8);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #1b2635;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #1e3144;
+            padding-bottom: 0.8rem;
+        }
+
+        .info-row:last-child {
+            border: none;
+            padding: 0;
+        }
+
+        .info-tag {
+            color: #7f9fcc;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            color: #ebf3ff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: right;
+        }
+
+        #error_message {
+            color: #ff5555;
+            font-size: 0.85rem;
+            min-height: 1rem;
+            margin-top: -0.5rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #0066ff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="spider-web">
+        <svg viewBox="0 0 1000 800" preserveAspectRatio="none">
+            <path d="M0,0 L1000,800 M1000,0 L0,800 M500,0 L500,800 M0,400 L1000,400" />
+            <circle cx="500" cy="400" r="180" fill="none" stroke="#0066ff" stroke-width="0.3" stroke-dasharray="10 15" />
+        </svg>
+    </div>
+
+    <main class="card">
+        <div class="input-group">
+            <label class="input-label"><span></span> Threat Analysis</label>
+            <div class="field-row">
+                <input type="text" id="virustotal_file_id" class="input-text" placeholder="Enter SHA-256 Hash...">
+                <button id="virustotal_analyze" class="btn-analyze">Scan</button>
+            </div>
+            <div id="error_message"></div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-row">
+                <span class="info-tag">File Name</span>
+                <span class="info-value" id="file_name">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-tag">File Size</span>
+                <span class="info-value" id="file_size">—</span>
+            </div>
+            <div class="info-row">
+                <span class="info-tag">Scan Result</span>
+                <span class="info-value" id="result_scan">—</span>
+            </div>
+        </div>
+        
+        <button id="return" class="btn-return">Back to Menu</button>
+    </main>
+
+    <script src="js/analyze.js"></script>
+</body>
+</html>

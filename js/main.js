@@ -1,9 +1,12 @@
 require("dotenv").config();
-const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const fs = require("fs");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+
+let mainWindow;
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 640,
     autoHideMenuBar: true,
@@ -15,10 +18,22 @@ function createWindow() {
     },
   });
 
-  win.loadFile("html/virustotal-desktop.html");
+  mainWindow.loadFile("html/virustotal.html");
 }
 
 app.whenReady().then(createWindow);
+
+ipcMain.on("open-page", (event, page) => {
+  mainWindow.loadFile(path.join(__dirname, "..", "html", `${page}.html`));
+});
+
+ipcMain.handle("open-file", async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ["openFile"],
+    filters: [{ name: "All Files", extensions: ["*"] }],
+  });
+  return result;
+});
 
 ipcMain.handle("virustotal-analyze", async (event, fileId) => {
   try {

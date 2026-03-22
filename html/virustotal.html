@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirusTotal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #0a0c10;
+            background-image: 
+                linear-gradient(rgba(0, 110, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 110, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e5efff;
+        }
+
+        .menu-container {
+            display: flex;
+            gap: 2rem;
+            z-index: 10;
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .menu-card {
+            flex: 1;
+            background: #0f1219;
+            border: 1px solid #1e2a3a;
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #0066ff;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: #0066ff;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .menu-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 102, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            color: #0066ff;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .menu-card:hover .icon-box {
+            background: #0066ff;
+            color: #0a0c10;
+            box-shadow: 0 0 20px #0066ff;
+        }
+
+        .menu-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .menu-desc {
+            font-size: 0.85rem;
+            color: #7f9fcc;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-card" id="check">
+            <div class="menu-title">Check File</div>
+            <div class="menu-desc">Analyze an existing file using hash or ID in VirusTotal database</div>
+        </div>
+
+        <div class="menu-card" id="upload">
+            <div class="menu-title">Upload File</div>
+            <div class="menu-desc">Upload a new file from your system for a complete security scan</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("check").addEventListener("click", () => {
+            window.electron.send("open-page", "check");
+        });
+
+        document.getElementById("upload").addEventListener("click", () => {
+            window.electron.send("open-page", "upload");
+        });
+    </script>
+</body>
+</html>
